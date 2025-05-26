@@ -1,0 +1,4 @@
+flask
+selenium
+gunicorn
+google-cloud-storage

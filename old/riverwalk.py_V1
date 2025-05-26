@@ -1,0 +1,33 @@
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from datetime import datetime
+import time
+
+URL = "https://cortland.com/apartments/cortland-lakecrest/available-apartments/?floorplan=8119"
+CHECK_INTERVAL = 86400  # Every hour
+
+def check_availability():
+    try:
+        options = webdriver.ChromeOptions()
+        options.add_argument('--headless')  # No GUI
+        driver = webdriver.Chrome(options=options)
+
+        driver.get(URL)
+        time.sleep(5)  # Wait for JS to load
+
+        element = driver.find_element(By.ID, "filter-results-count")
+        count = element.text.strip()
+        print(f"[{datetime.now()}] Available apartments: {count}")
+
+        driver.quit()
+        return int(count)
+    except Exception as e:
+        print(f"[{datetime.now()}] Error: {e}")
+        return None
+
+if __name__ == "__main__":
+    while True:
+        check_availability()
+        time.sleep(CHECK_INTERVAL)
+
