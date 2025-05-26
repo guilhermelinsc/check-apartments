@@ -1,0 +1,14 @@
+name: Trigger Apartment Checker
+
+on:
+  schedule:
+    - cron: '0 9 */2 * *'  # Every other day at 9AM UTC
+  workflow_dispatch:       # Optional: allows manual trigger from GitHub
+
+jobs:
+  invoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Cloud Run Service
+        run: |
+          curl -s -X GET ${{ secrets.CLOUD_RUN_URL }}
