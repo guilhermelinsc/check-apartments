@@ -9,7 +9,7 @@ import os
 import json
 
 URL = "https://cortland.com/apartments/cortland-lakecrest/available-apartments/?floorplan=8119"
-BUCKET_NAME = os.environ.get("GCS_BUCKET")
+BUCKET_NAME = os.environ.get("BUCKET_NAME")
 BLOB_NAME = "last_apartments.json"
 
 app = Flask(__name__)
@@ -38,7 +38,8 @@ def fetch_available_apartments():
     return apartment_numbers
 
 def get_previous_apartments():
-    client = storage.Client()
+    project_id = os.getenv("GOOGLE_CLOUD_PROJECT", "modular-rex-454820-v2")
+    client = storage.Client(project=project_id)
     bucket = client.bucket(BUCKET_NAME)
     blob = bucket.blob(BLOB_NAME)
 
@@ -54,7 +55,7 @@ def save_current_apartments(apartment_list):
     blob.upload_from_string(json.dumps(apartment_list))
 
 def notify_user(new_apartments):
-    # Example: Print to logs. Replace with email/webhook integration
+    # Replace with email/webhook integration if desired
     print(f"🟢 New apartments found: {new_apartments}")
 
 @app.route("/", methods=["GET"])
@@ -73,3 +74,6 @@ def check():
         "found": len(current),
         "new_apartments": new_apartments
     })
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
