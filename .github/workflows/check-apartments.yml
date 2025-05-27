@@ -9,9 +9,6 @@ jobs:
   invoke:
     runs-on: ubuntu-latest
     steps:
-      - name: Show Cloud Run URL
-        run: echo "${{ secrets.CLOUD_RUN_URL }}"
-
       - name: Call Cloud Run Service
         run: |
           curl -s -X GET ${{ secrets.CLOUD_RUN_URL }}
