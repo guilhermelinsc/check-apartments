@@ -1,10 +1,16 @@
 FROM python:3.11-slim
 
-WORKDIR /app
+RUN apt-get update && apt-get install -y \
+    chromium chromium-driver curl unzip gnupg \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+ENV CHROME_BIN=/usr/bin/chromium \
+    CHROMEDRIVER_BIN=/usr/bin/chromedriver
+
+WORKDIR /app
 
 COPY . .
 
-CMD ["gunicorn", "-b", "0.0.0.0:8080", "main:app"]
+RUN pip install --no-cache-dir -r requirements.txt
+
+CMD ["gunicorn", "-b", "0.0.0.0:8080", "app:app"]
