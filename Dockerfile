@@ -17,11 +17,11 @@ RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add
  && rm -rf /var/lib/apt/lists/*
 
 # Set Chrome and Chromedriver version explicitly
-ENV CHROME_VERSION=136.0.7103.113
-ENV CHROMEDRIVER_VERSION=136.0.7103.113
+ENV CHROME_VERSION=138.0.7204.49
+ENV CHROMEDRIVER_VERSION=138.0.7204.49
 
 # Install Chromedriver for Chrome 136.0.7103.113
-RUN wget -q "https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.113/linux64/chromedriver-linux64.zip" && \
+RUN wget -q "https://storage.googleapis.com/chrome-for-testing-public/138.0.7204.49/linux64/chromedriver-linux64.zip" && \
     unzip chromedriver-linux64.zip && \
     mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
     chmod +x /usr/local/bin/chromedriver && \

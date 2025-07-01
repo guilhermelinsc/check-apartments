@@ -5,8 +5,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from google.cloud import storage
 from datetime import datetime
+from zoneinfo import ZoneInfo
 import os
 import json
+
 
 URL = "https://cortland.com/apartments/cortland-lakecrest/available-apartments/?floorplan=8119"
 BUCKET_NAME = os.environ.get("BUCKET_NAME")
@@ -69,10 +71,14 @@ def check():
         notify_user(new_apartments)
         save_current_apartments(current)
 
+    florida_time = datetime.now(ZoneInfo("America/New_York"))
+    formatted_time = florida_time.strftime("%B %d, %Y %I:%M %p %Z")
+
     return jsonify({
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": formatted_time,
         "found": len(current),
-        "new_apartments": new_apartments
+        "new_apartments": new_apartments,
+        "all_apartments": current
     })
 
 if __name__ == "__main__":
